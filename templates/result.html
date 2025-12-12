@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0"><i class="bi bi-check-circle"></i> Conversion Successful!</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-file-earmark-check display-1 text-success mb-3"></i>
+                    <h4>MoTeC .ld File Generated</h4>
+                    <p class="lead">Your {{ log_type }} log has been successfully converted to MoTeC format.</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Download Your File:</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control text-center" 
+                               value="{{ output_file }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ output_file }}')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                    <a href="{{ url_for('download_file', filename=output_file) }}" 
+                       class="btn btn-success btn-lg px-5">
+                        <i class="bi bi-download"></i> Download .ld File
+                    </a>
+                </div>
+                
+                {% if metadata and any(metadata.values()) %}
+                <div class="accordion mb-4" id="metadataDisplay">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" 
+                                    data-bs-toggle="collapse" data-bs-target="#metadataDetails">
+                                <i class="bi bi-card-checklist me-2"></i> Applied Metadata
+                            </button>
+                        </h2>
+                        <div id="metadataDetails" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <div class="row text-start">
+                                    {% for key, value in metadata.items() if value %}
+                                    <div class="col-md-6 mb-2">
+                                        <strong>{{ key.replace('_', ' ').title() }}:</strong>
+                                        <span class="ms-2">{{ value }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <a href="{{ url_for('convert') }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-clockwise"></i> Convert Another File
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary ms-2">
+                        <i class="bi bi-house"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-lg mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Next Steps</h5>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item">Download the .ld file using the button above</li>
+                    <li class="list-group-item">Open the file in MoTeC i2 Pro or i2 Standard</li>
+                    <li class="list-group-item">Analyze your data using MoTeC's powerful tools</li>
+                    <li class="list-group-item">For CAN logs, all signals from the DBC file will be available as channels</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Show success message
+        alert('Filename copied to clipboard!');
+    });
+}
+</script>
+{% endblock %}

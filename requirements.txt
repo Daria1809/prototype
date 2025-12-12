@@ -1,0 +1,7 @@
+Flask==2.3.3
+Werkzeug==2.3.7
+cantools==39.0.0
+numpy>=1.26.0
+pandas==2.0.3
+python-dateutil==2.8.2
+six==1.16.0git remote -v
